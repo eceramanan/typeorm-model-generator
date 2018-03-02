@@ -56,17 +56,23 @@ export class Engine {
     private createModelFromMetadata(databaseModel: DatabaseModel) {
         this.createHandlebarsHelpers();
         let templatePath = path.resolve(__dirname, "../../src/entity.mst");
+        let templatePath1 = path.resolve(__dirname, "../../src/repository.mst");
         let template = fs.readFileSync(templatePath, "UTF-8");
+        let template1 = fs.readFileSync(templatePath1, "UTF-8");
         let resultPath = this.Options.resultsPath;
         if (!fs.existsSync(resultPath)) fs.mkdirSync(resultPath);
         let entitesPath = resultPath;
+        let repositoriesPath = resultPath;
         if (!this.Options.noConfigs) {
             this.createTsConfigFile(resultPath);
             this.createTypeOrmConfig(resultPath);
             entitesPath = path.resolve(resultPath, "./entities");
+            repositoriesPath = path.resolve(resultPath, "./repositories");
             if (!fs.existsSync(entitesPath)) fs.mkdirSync(entitesPath);
+            if (!fs.existsSync(repositoriesPath)) fs.mkdirSync(repositoriesPath);
         }
         let compliedTemplate = Handlebars.compile(template, { noEscape: true });
+        let compliedTemplate1 = Handlebars.compile(template1, { noEscape: true });
         databaseModel.entities.forEach(element => {
             element.Imports = [];
             element.Columns.forEach(column => {
@@ -98,8 +104,18 @@ export class Engine {
                 entitesPath,
                 casedFileName + ".ts"
             );
+            let resultFilePath1 = path.resolve(
+                repositoriesPath,
+                casedFileName + "Repository.ts"
+            );
             let rendered = compliedTemplate(element);
             fs.writeFileSync(resultFilePath, rendered, {
+                encoding: "UTF-8",
+                flag: "w"
+            });
+            console.log(resultFilePath1)
+            let rendered1 = compliedTemplate1(element);
+            fs.writeFileSync(resultFilePath1, rendered1, {
                 encoding: "UTF-8",
                 flag: "w"
             });

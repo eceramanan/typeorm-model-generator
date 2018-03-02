@@ -1,0 +1,7 @@
+import { EntityRepository, Repository } from 'typeorm';
+import { {{EntityName}} as objModel } from '../models/{{EntityName}}';
+
+@EntityRepository(objModel)
+export class {{EntityName}}Repository extends Repository<objModel> {
+
+}
