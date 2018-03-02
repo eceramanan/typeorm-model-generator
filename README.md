@@ -51,6 +51,11 @@ Options:
 * Creating model from local MSSQL database
    * Global module
       ```
+      typeorm-model-generator -h localhost -d amdb -u amapp -x P@ssw0rd -e mysql -o .
+      ````
+* Creating model from local MSSQL database
+   * Global module
+      ```
       typeorm-model-generator -h localhost -d tempdb -u sa -x !Passw0rd -e mssql -o .
       ````
    * Npx Way
